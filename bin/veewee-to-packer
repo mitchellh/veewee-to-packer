@@ -7,6 +7,26 @@ Signal.trap("INT") { exit 1 }
 $stdout.sync = true
 $stderr.sync = true
 
+require 'optparse'
+
+# Parse arguments
+options = {
+  :builders => [],
+  :output => "template.json"
+}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: veewee-to-packer [options] TEMPLATE"
+
+  opts.on("--builder x,y,z", Array, "Builders to output template for.") do |builders|
+    options[:builders] = builders
+  end
+
+  opts.on("-o", "--output FILE", String, "Name of the output file.") do |output|
+    options[:output] = output
+  end
+end.parse!
+
 if ARGV.length != 1
   $stderr.puts "ERROR: One argument must be given: the template to convert."
   exit 1
@@ -15,7 +35,7 @@ end
 # Do the actual conversion
 require "veewee-to-packer"
 begin
-  VeeweeToPacker.convert(ARGV[0], "template.json")
+  VeeweeToPacker.convert(ARGV[0], options[:output], options[:builders])
 rescue VeeweeToPacker::Error => e
   $stderr.puts "An error occurred:\n\n#{e}"
   exit 1
