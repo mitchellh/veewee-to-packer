@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+# Trap interrupts to quit cleanly so they don't result in random stacktraces.
+Signal.trap("INT") { exit 1 }
+
+# Stdout/stderr should not buffer output
+$stdout.sync = true
+$stderr.sync = true
+
+if ARGV.length != 1
+  $stderr.puts "ERROR: One argument must be given: the template to convert."
+  exit 1
+end
+
+# Do the actual conversion
+require "veewee-to-packer"
+VeeweeToPacker.convert(ARGV[0], "template.json")
