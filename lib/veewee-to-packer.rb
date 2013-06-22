@@ -6,6 +6,10 @@ module VeeweeToPacker
   # Converts the given Veewee template into a Packer template, outputting
   # the JSON to the given output path.
   def self.convert(input, output)
-    load input
+    begin
+      load input
+    rescue LoadError => e
+      raise Error, "Error loading input template: #{e}"
+    end
   end
 end

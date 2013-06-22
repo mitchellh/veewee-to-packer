@@ -14,4 +14,9 @@ end
 
 # Do the actual conversion
 require "veewee-to-packer"
-VeeweeToPacker.convert(ARGV[0], "template.json")
+begin
+  VeeweeToPacker.convert(ARGV[0], "template.json")
+rescue VeeweeToPacker::Error => e
+  $stderr.puts "An error occurred:\n\n#{e}"
+  exit 1
+end
