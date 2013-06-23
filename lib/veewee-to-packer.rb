@@ -29,6 +29,7 @@ module VeeweeToPacker
     # Determine the directory where the template is
     input_dir = Pathname.new(input).parent
 
+    # Load the definition file and capture its configuration
     begin
       load input
     rescue LoadError => e
@@ -36,6 +37,10 @@ module VeeweeToPacker
     end
 
     definition = Veewee::Definition.captured
+
+    # This will keep track of any warnings (errors are raised) that
+    # we have during the conversion process.
+    warnings = []
 
     # This will be the packer template contents that we'll turn to JSON
     template = {}
@@ -58,7 +63,10 @@ module VeeweeToPacker
       template["provisioners"] = [provisioner]
 
       # Unused fields
-      definition.delete(:postinstall_timeout)
+      if definition[:postinstall_timeout]
+        definition.delete(:postinstall_timeout)
+        warnings << "':postinstall_timeout' doesn't exist in Packer."
+      end
     end
 
     template["builders"] = builders.map do |builder|
@@ -68,5 +76,7 @@ module VeeweeToPacker
     output.join("template.json").open("w") do |f|
       f.write(JSON.pretty_generate(template))
     end
+
+    warnings
   end
 end

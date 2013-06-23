@@ -35,7 +35,23 @@ end
 # Do the actual conversion
 require "veewee-to-packer"
 begin
-  VeeweeToPacker.convert(ARGV[0], options[:output], options[:builders])
+  warnings = VeeweeToPacker.convert(ARGV[0], options[:output], options[:builders])
+
+  if !warnings.empty?
+    puts "There were some non-critical warnings during the conversion process."
+    puts "Your template will function despite these warnings, but they're noted"
+    puts "here so you can understand some aspects of the Veewee definition that"
+    puts "may not have carried over perfectly to the Packer template:"
+    puts
+    warnings.each do |warning|
+      puts "* #{warning}"
+    end
+    puts
+  end
+
+  puts "Success! Your Veewee definition was converted to a Packer template!"
+  puts "The template can be found in the `template.json` file in the output"
+  puts "directory: #{options[:output]}"
 rescue VeeweeToPacker::Error => e
   $stderr.puts "An error occurred:\n\n#{e}"
   exit 1
