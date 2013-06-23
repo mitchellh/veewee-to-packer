@@ -70,7 +70,14 @@ module VeeweeToPacker
     end
 
     template["builders"] = builders.map do |builder|
-      builder.convert(definition.dup, input_dir, output)
+      config, build_warnings = builder.convert(definition.dup, input_dir, output)
+      if build_warnings && !build_warnings.empty?
+        build_warnings.each do |warning|
+          warnings << "Builder '#{builder.name}': #{warning}"
+        end
+      end
+
+      config
     end
 
     output.join("template.json").open("w") do |f|

@@ -8,7 +8,12 @@ module VeeweeToPacker
         "Ubuntu_64" => "ubuntu-64"
       }
 
+      def self.name
+        "vmware"
+      end
+
       def self.convert(input, input_dir, output_dir)
+        warnings = []
         builder = { "type" => "vmware" }
 
         if input[:boot_cmd_sequence]
@@ -28,9 +33,11 @@ module VeeweeToPacker
         end
 
         if input[:os_type_id]
-          guestos = GUESTOS_MAP[input.delete(:os_type_id)]
+          guestos_id = input.delete(:os_type_id)
+          guestos = GUESTOS_MAP[guestos_id]
           if !guestos
             guestos = "other"
+            warnings << "Unknown guest OS type: '#{guestos_id}'. Using 'other'."
           end
 
           builder["guest_os_type"] = guestos
