@@ -21,6 +21,10 @@ module VeeweeToPacker
           builder["boot_wait"] = "#{input.delete(:boot_wait)}s"
         end
 
+        if input[:disk_size]
+          builder["disk_size"] = input.delete(:disk_size).to_i
+        end
+
         if input[:os_type_id]
           guestos = GUESTOS_MAP[input.delete(:os_type_id)]
           if !guestos
@@ -59,6 +63,7 @@ module VeeweeToPacker
         end
 
         # These are unused, so just ignore them.
+        input.delete(:disk_format)
         input.delete(:hostiocache)
         input.delete(:iso_download_timeout)
         input.delete(:iso_file)

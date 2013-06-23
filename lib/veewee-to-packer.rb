@@ -1,3 +1,5 @@
+require "fileutils"
+
 require "veewee-to-packer/builders/vmware"
 require "veewee-to-packer/error"
 require "veewee-to-packer/mock_veewee"
