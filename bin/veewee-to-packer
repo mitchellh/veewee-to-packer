@@ -52,6 +52,9 @@ begin
   puts "Success! Your Veewee definition was converted to a Packer template!"
   puts "The template can be found in the `template.json` file in the output"
   puts "directory: #{options[:output]}"
+  puts
+  puts "Please be sure to run `packer validate` against the new template"
+  puts "to verify settings are correct."
 rescue VeeweeToPacker::Error => e
   $stderr.puts "An error occurred:\n\n#{e}"
   exit 1
