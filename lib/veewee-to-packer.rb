@@ -38,6 +38,9 @@ module VeeweeToPacker
       }
 
       template["provisioners"] = [provisioner]
+
+      # Unused fields
+      definition.delete(:postinstall_timeout)
     end
 
     template["builders"] = builders.map do |builder|
