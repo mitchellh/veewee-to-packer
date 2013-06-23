@@ -18,9 +18,13 @@ module VeeweeToPacker
 
         if input[:boot_cmd_sequence]
           builder["boot_command"] = input.delete(:boot_cmd_sequence).map do |command|
-            command.gsub("<Esc>", "<esc>").
+            command = command.gsub("<Esc>", "<esc>").
               gsub("<Return>", "<return>").
               gsub("<Enter>", "<enter>")
+
+            # We insert a wait after every command because that is the behavior
+            # of Veewee
+            "#{command}<wait>"
           end
         end
 
