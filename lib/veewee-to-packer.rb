@@ -1,4 +1,6 @@
 require "fileutils"
+require "json"
+require "pathname"
 
 require "veewee-to-packer/builders/vmware"
 require "veewee-to-packer/error"
@@ -20,6 +22,13 @@ module VeeweeToPacker
       klass
     end
 
+    # Make the output directory
+    output = Pathname.new(output)
+    output.mkpath
+
+    # Determine the directory where the template is
+    input_dir = Pathname.new(input).parent
+
     begin
       load input
     rescue LoadError => e
@@ -33,11 +42,18 @@ module VeeweeToPacker
 
     # First, convert the postinstall_files into a shell provisioning step
     if definition[:postinstall_files]
-      scripts = definition.delete(:postinstall_files)
-      provisioner = {
-        "type" => "shell",
-        "scripts" => scripts
-      }
+      provisioner = { "type" => "shell" }
+      provisioner["scripts"] = definition.delete(:postinstall_files).map do |script|
+        scripts_dir = output.join("scripts")
+        scripts_dir.mkpath
+
+        script_file_src = Pathname.new(File.expand_path(script, input_dir))
+        script_file_dest = scripts_dir.join(script_file_src.basename)
+
+        FileUtils.cp(script_file_src, script_file_dest)
+
+        "scripts/#{script_file_dest.basename}"
+      end
 
       template["provisioners"] = [provisioner]
 
@@ -46,9 +62,11 @@ module VeeweeToPacker
     end
 
     template["builders"] = builders.map do |builder|
-      builder.convert(definition.dup)
+      builder.convert(definition.dup, input_dir, output)
     end
 
-    p template
+    output.join("template.json").open("w") do |f|
+      f.write(JSON.pretty_generate(template))
+    end
   end
 end

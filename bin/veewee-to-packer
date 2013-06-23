@@ -12,7 +12,7 @@ require 'optparse'
 # Parse arguments
 options = {
   :builders => [],
-  :output => "template.json"
+  :output => "output"
 }
 
 OptionParser.new do |opts|
@@ -22,7 +22,7 @@ OptionParser.new do |opts|
     options[:builders] = builders
   end
 
-  opts.on("-o", "--output FILE", String, "Name of the output file.") do |output|
+  opts.on("-o", "--output DIR", String, "Directory where files will be outputted.") do |output|
     options[:output] = output
   end
 end.parse!

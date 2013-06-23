@@ -1,3 +1,5 @@
+require "fileutils"
+
 module VeeweeToPacker
   module Builders
     class VMware
@@ -6,7 +8,7 @@ module VeeweeToPacker
         "Ubuntu_64" => "ubuntu-64"
       }
 
-      def self.convert(input)
+      def self.convert(input, input_dir, output_dir)
         builder = { "type" => "vmware" }
 
         if input[:boot_cmd_sequence]
@@ -32,6 +34,18 @@ module VeeweeToPacker
           end
 
           builder["guest_os_type"] = guestos
+        end
+
+        if input[:kickstart_file]
+          http_dir = output_dir.join("http")
+          http_dir.mkpath
+
+          kickstart_file_src = Pathname.new(File.expand_path(input.delete(:kickstart_file), input_dir))
+          kickstart_file_dest = http_dir.join(kickstart_file_src.basename)
+
+          FileUtils.cp(kickstart_file_src, kickstart_file_dest)
+
+          builder["http_directory"] = "http"
         end
 
         builder["iso_md5"] = input.delete(:iso_md5)
@@ -64,6 +78,8 @@ module VeeweeToPacker
 
         # These are unused, so just ignore them.
         input.delete(:disk_format)
+        input.delete(:kickstart_port)
+        input.delete(:kickstart_timeout)
         input.delete(:hostiocache)
         input.delete(:iso_download_timeout)
         input.delete(:iso_file)
