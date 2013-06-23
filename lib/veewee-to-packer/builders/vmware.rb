@@ -19,8 +19,9 @@ module VeeweeToPacker
         if input[:boot_cmd_sequence]
           builder["boot_command"] = input.delete(:boot_cmd_sequence).map do |command|
             command = command.gsub("<Esc>", "<esc>").
-              gsub("<Return>", "<return>").
               gsub("<Enter>", "<enter>").
+              gsub("<Return>", "<return>").
+              gsub("<Tab>", "<tab>").
               gsub("%IP%", "{{ .HTTPIP }}").
               gsub("%PORT%", "{{ .HTTPPort }}")
 
