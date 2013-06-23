@@ -66,7 +66,7 @@ module VeeweeToPacker
 
         builder["ssh_username"] = input.delete(:ssh_user) if input[:ssh_user]
         builder["ssh_password"] = input.delete(:ssh_password) if input[:ssh_password]
-        builder["ssh_port"] = input.delete(:ssh_guest_port) if input[:ssh_guest_port]
+        builder["ssh_port"] = input.delete(:ssh_guest_port).to_i if input[:ssh_guest_port]
         builder["ssh_wait_timeout"] = "#{input.delete(:ssh_login_timeout)}s" if input[:ssh_login_timeout]
 
         builder["shutdown_command"] = input.delete(:shutdown_cmd) if input[:shutdown_cmd]
