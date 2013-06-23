@@ -20,7 +20,9 @@ module VeeweeToPacker
           builder["boot_command"] = input.delete(:boot_cmd_sequence).map do |command|
             command = command.gsub("<Esc>", "<esc>").
               gsub("<Return>", "<return>").
-              gsub("<Enter>", "<enter>")
+              gsub("<Enter>", "<enter>").
+              gsub("%IP%", "{{ .HTTPIP }}").
+              gsub("%PORT%", "{{ .HTTPPort }}")
 
             # We insert a wait after every command because that is the behavior
             # of Veewee
