@@ -149,6 +149,7 @@ module VeeweeToPacker
           builder["shutdown_command"] = "echo '#{builder["shutdown_command"]}' > shutdown.sh; #{sudo_command}"
         end
 
+        builder["guest_additions_path"] = "VBoxGuestAdditions_{{.Version}}.iso"
         builder["virtualbox_version_file"] = ".vbox_version"
 
         builder["vboxmanage"] = []
