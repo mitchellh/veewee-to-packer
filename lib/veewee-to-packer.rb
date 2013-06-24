@@ -2,6 +2,7 @@ require "fileutils"
 require "json"
 require "pathname"
 
+require "veewee-to-packer/builders/virtualbox"
 require "veewee-to-packer/builders/vmware"
 require "veewee-to-packer/error"
 require "veewee-to-packer/mock_veewee"
@@ -9,6 +10,7 @@ require "veewee-to-packer/version"
 
 module VeeweeToPacker
   BUILDERS = {
+    "virtualbox" => Builders::VirtualBox,
     "vmware" => Builders::VMware
   }
 
