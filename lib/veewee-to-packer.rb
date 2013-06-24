@@ -60,6 +60,21 @@ module VeeweeToPacker
         "scripts/#{script_file_dest.basename}"
       end
 
+      if definition[:sudo_cmd]
+        override = {}
+        provisioner["override"] = override
+
+        builders.each do |builder|
+          execute_command = definition[:sudo_cmd].
+            gsub("%p", definition[:ssh_password]).
+            gsub("%f", "{{.Path}}")
+
+          override[builder.name] = {
+            "execute_command" => execute_command
+          }
+        end
+      end
+
       template["provisioners"] = [provisioner]
 
       # Unused fields
