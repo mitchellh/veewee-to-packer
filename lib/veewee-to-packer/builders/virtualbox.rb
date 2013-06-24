@@ -149,6 +149,8 @@ module VeeweeToPacker
           builder["shutdown_command"] = "echo '#{builder["shutdown_command"]}' > shutdown.sh; #{sudo_command}"
         end
 
+        builder["virtualbox_version_file"] = ".vbox_version"
+
         builder["vboxmanage"] = []
 
         if input[:memory_size]
