@@ -4,6 +4,7 @@ module VeeweeToPacker
   module Builders
     class VMware
       GUESTOS_MAP = {
+        "RedHat" => "redhat",
         "Ubuntu" => "ubuntu",
         "Ubuntu_64" => "ubuntu-64"
       }
@@ -62,6 +63,10 @@ module VeeweeToPacker
           builder["http_directory"] = "http"
         end
 
+        if input[:iso_download_instructions]
+          warnings << "ISO download instructions: #{input.delete(:iso_download_instructions)}"
+        end
+
         builder["iso_md5"] = input.delete(:iso_md5)
         builder["iso_url"] = input.delete(:iso_src)
 
@@ -92,11 +97,13 @@ module VeeweeToPacker
 
         # These are unused, so just ignore them.
         input.delete(:disk_format)
+        input.delete(:ioapic)
         input.delete(:kickstart_port)
         input.delete(:kickstart_timeout)
         input.delete(:hostiocache)
         input.delete(:iso_download_timeout)
         input.delete(:iso_file)
+        input.delete(:pae)
         input.delete(:ssh_host_port)
         input.delete(:ssh_key)
 
@@ -104,7 +111,7 @@ module VeeweeToPacker
           raise Error, "Uknown keys: #{input.keys.sort.inspect}"
         end
 
-        return builder
+        [builder, warnings]
       end
     end
   end
