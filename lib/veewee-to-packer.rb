@@ -90,6 +90,12 @@ module VeeweeToPacker
       warnings << ":hooks are not supported by Packer."
     end
 
+    if definition[:params]
+      definition.delete(:params)
+      warnings << ":params are not supported by Packer."
+    end
+
+    # Build the builders
     template["builders"] = builders.map do |builder|
       config, build_warnings = builder.convert(definition.dup, input_dir, output)
       if build_warnings && !build_warnings.empty?
