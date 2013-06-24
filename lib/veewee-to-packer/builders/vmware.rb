@@ -4,6 +4,8 @@ module VeeweeToPacker
   module Builders
     class VMware
       GUESTOS_MAP = {
+        "OpenSUSE" => "suse",
+        "OpenSUSE_64" => "suse-64",
         "RedHat" => "redhat",
         "Ubuntu" => "ubuntu",
         "Ubuntu_64" => "ubuntu-64"
@@ -55,10 +57,14 @@ module VeeweeToPacker
           http_dir = output_dir.join("http")
           http_dir.mkpath
 
-          kickstart_file_src = Pathname.new(File.expand_path(input.delete(:kickstart_file), input_dir))
-          kickstart_file_dest = http_dir.join(kickstart_file_src.basename)
+          kickstart_file = input.delete(:kickstart_file)
+          kickstart_file = [kickstart_file] if !kickstart_file.is_a?(Array)
 
-          FileUtils.cp(kickstart_file_src, kickstart_file_dest)
+          kickstart_file.each do |single_file|
+            kickstart_file_src = Pathname.new(File.expand_path(single_file, input_dir))
+            kickstart_file_dest = http_dir.join(kickstart_file_src.basename)
+            FileUtils.cp(kickstart_file_src, kickstart_file_dest)
+          end
 
           builder["http_directory"] = "http"
         end
