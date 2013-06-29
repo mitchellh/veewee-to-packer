@@ -84,6 +84,7 @@ module VeeweeToPacker
               gsub("<Enter>", "<enter>").
               gsub("<Return>", "<return>").
               gsub("<Tab>", "<tab>").
+              gsub("%NAME%", "{{ .Name }}").
               gsub("%IP%", "{{ .HTTPIP }}").
               gsub("%PORT%", "{{ .HTTPPort }}")
 
