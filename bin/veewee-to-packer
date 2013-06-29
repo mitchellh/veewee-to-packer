@@ -11,7 +11,7 @@ require 'optparse'
 
 # Parse arguments
 options = {
-  :builders => [],
+  :builders => ["virtualbox", "vmware"],
   :output => "output"
 }
 
