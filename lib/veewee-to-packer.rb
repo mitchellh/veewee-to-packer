@@ -57,6 +57,15 @@ module VeeweeToPacker
         script_file_src = Pathname.new(File.expand_path(script, input_dir))
         script_file_dest = scripts_dir.join(script_file_src.basename)
 
+        if !script_file_src.file?
+          raise Error, "File could not be found: #{script_file_src}\n" +
+            "Please make sure the Veewee definition you're converting\n" +
+            "was not copied without its accompanying shell scripts.\n" +
+            "This error is usually caused by copying the definition without\n" +
+            "copying all the required files. Otherwise, this definition is\n" +
+            "broken in Veewee too."
+        end
+
         FileUtils.cp(script_file_src, script_file_dest)
 
         "scripts/#{script_file_dest.basename}"
