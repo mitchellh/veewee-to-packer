@@ -189,7 +189,7 @@ module VeeweeToPacker
         input.delete(:ssh_key)
 
         if input.length > 0
-          raise Error, "Uknown keys: #{input.keys.sort.inspect}"
+          raise Error, "Unknown keys: #{input.keys.sort.inspect}"
         end
 
         [builder, warnings]
