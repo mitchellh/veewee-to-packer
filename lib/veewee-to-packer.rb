@@ -33,7 +33,7 @@ module VeeweeToPacker
 
     # Load the definition file and capture its configuration
     begin
-      load input
+      load File.expand_path(input)
     rescue LoadError => e
       raise Error, "Error loading input template: #{e}"
     end
