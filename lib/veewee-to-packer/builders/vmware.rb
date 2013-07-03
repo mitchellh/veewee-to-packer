@@ -164,8 +164,21 @@ module VeeweeToPacker
         # Handle VMware Fusion specific settings
         # Only relevant setting is enable_hypervisor_support while turns on vhv
         if input[:vmfusion]
-          vmfusion = input.delete(:vmfusion)[:vm_options]
-          builder["vmx_data"]["vhv.enable"] = vmfusion['enable_hypervisor_support'] if vmfusion['enable_hypervisor_support']
+          vmfusion = input.delete(:vmfusion).dup
+
+          if vmfusion[:vm_options]
+            options = vmfusion.delete(:vm_options)
+
+            if options["enable_hypervisor_support"]
+              builder["vmx_data"]["vhv.enable"] = options.delete("enable_hypervisor_support")
+            end
+          end
+
+          if vmfusion.length > 0
+            vmfusion.each do |key, _|
+              warnings << "Unsupported vmfusion key: #{key}"
+            end
+          end
         end
 
         # These are unused, so just ignore them.

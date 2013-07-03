@@ -181,14 +181,24 @@ module VeeweeToPacker
         # Handle virtualbox specific options
         # these are all virtualbox flags
         if input[:virtualbox]
-          virtualbox_flags = input.delete(:virtualbox)[:vm_options]
-          unless virtualbox_flags[0].nil?
-            virtualbox_flags[0].each do |vm_flag,vm_flag_value|
-              builder["vboxmanage"] << [
-                "modifyvm", "{{.Name}}",
-                "--#{vm_flag}",
-                "#{vm_flag_value}"
-              ]
+          virtualbox = input.delete(:virtualbox).dup
+
+          if virtualbox[:vm_options]
+            virtualbox_flags = virtualbox.delete(:vm_options)
+            if !virtualbox_flags[0].nil?
+              virtualbox_flags[0].each do |key, value|
+                builder["vboxmanage"] << [
+                  "modifyvm", "{{.Name}}",
+                  "--#{key}",
+                  "#{value}"
+                ]
+              end
+            end
+          end
+
+          if !virtualbox.empty?
+            virtualbox.each do |key, _|
+              warnings << "Unsupported virtualbox option: #{key}"
             end
           end
         end
