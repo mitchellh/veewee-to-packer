@@ -178,6 +178,21 @@ module VeeweeToPacker
           end
         end
 
+        # Handle virtualbox specific options
+        # these are all virtualbox flags
+        if input[:virtualbox]
+          virtualbox_flags = input.delete(:virtualbox)[:vm_options]
+          unless virtualbox_flags[0].nil?
+            virtualbox_flags[0].each do |vm_flag,vm_flag_value|
+              builder["vboxmanage"] << [
+                "modifyvm", "{{.Name}}",
+                "--#{vm_flag}",
+                "#{vm_flag_value}"
+              ]
+            end
+          end
+        end
+
         # These are unused, so just ignore them.
         input.delete(:disk_format)
         input.delete(:hostiocache)
@@ -187,6 +202,7 @@ module VeeweeToPacker
         input.delete(:iso_file)
         input.delete(:ssh_host_port)
         input.delete(:ssh_key)
+        input.delete(:vmfusion)
 
         if input.length > 0
           raise Error, "Unknown keys: #{input.keys.sort.inspect}"
