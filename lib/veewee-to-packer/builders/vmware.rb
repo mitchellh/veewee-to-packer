@@ -161,6 +161,13 @@ module VeeweeToPacker
           builder["vmx_data"]["cpuid.coresPerSocket"] = "1"
         end
 
+        # Handle VMware Fusion specific settings
+        # Only relevant setting is enable_hypervisor_support while turns on vhv
+        if input[:vmfusion]
+          vmfusion = input.delete(:vmfusion)[:vm_options]
+          builder["vmx_data"]["vhv.enable"] = vmfusion['enable_hypervisor_support'] if vmfusion['enable_hypervisor_support']
+        end
+
         # These are unused, so just ignore them.
         input.delete(:disk_format)
         input.delete(:ioapic)
@@ -172,6 +179,7 @@ module VeeweeToPacker
         input.delete(:pae)
         input.delete(:ssh_host_port)
         input.delete(:ssh_key)
+        input.delete(:virtualbox)
 
         if input.length > 0
           raise Error, "Uknown keys: #{input.keys.sort.inspect}"

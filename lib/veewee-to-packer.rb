@@ -106,6 +106,11 @@ module VeeweeToPacker
       warnings << ":params are not supported by Packer."
     end
 
+    if definition[:kvm]
+      definition.delete(:kvm)
+      warnings << ":kvm not supported by Packer."
+    end
+
     # Build the builders
     template["builders"] = builders.map do |builder|
       config, build_warnings = builder.convert(definition.dup, input_dir, output)
