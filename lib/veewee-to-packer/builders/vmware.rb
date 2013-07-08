@@ -183,6 +183,7 @@ module VeeweeToPacker
 
         # These are unused, so just ignore them.
         input.delete(:disk_format)
+        input.delete(:hwvirtex)
         input.delete(:ioapic)
         input.delete(:kickstart_port)
         input.delete(:kickstart_timeout)
@@ -195,7 +196,7 @@ module VeeweeToPacker
         input.delete(:virtualbox)
 
         if input.length > 0
-          raise Error, "Uknown keys: #{input.keys.sort.inspect}"
+          raise Error, "Uknown keys for VMware: #{input.keys.sort.inspect}"
         end
 
         [builder, warnings]

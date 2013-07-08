@@ -215,7 +215,7 @@ module VeeweeToPacker
         input.delete(:vmfusion)
 
         if input.length > 0
-          raise Error, "Unknown keys: #{input.keys.sort.inspect}"
+          raise Error, "Unknown keys for VirtualBox: #{input.keys.sort.inspect}"
         end
 
         [builder, warnings]
