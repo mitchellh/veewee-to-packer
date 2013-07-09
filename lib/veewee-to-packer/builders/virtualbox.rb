@@ -102,6 +102,25 @@ module VeeweeToPacker
           builder["disk_size"] = input.delete(:disk_size).to_i
         end
 
+        if input[:floppy_files]
+          builder["floppy_files"] = input.delete(:floppy_files).map do |file|
+            files_dir = output_dir.join("floppy")
+            files_dir.mkpath
+
+            file_source = Pathname.new(File.expand_path(file, input_dir))
+            file_dest = files_dir.join(file_source.basename)
+
+            if !file_source.file?
+              raise Error, "Floppy file could not be found: #{file_source}\n" +
+                "Please make sure the Veewee definition you're converting\n" +
+                "was copied with all of its original accompanying files."
+            end
+
+            FileUtils.cp(file_source, file_dest)
+            "floppy/#{file_dest.basename}"
+          end
+        end
+
         if input[:os_type_id]
           guestos_id = input.delete(:os_type_id)
           guestos = GUESTOS_MAP[guestos_id]
