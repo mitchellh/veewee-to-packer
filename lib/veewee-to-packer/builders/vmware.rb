@@ -85,6 +85,7 @@ module VeeweeToPacker
             command = command.gsub("<Esc>", "<esc>").
               gsub("<Enter>", "<enter>").
               gsub("<Return>", "<return>").
+              gsub("<Spacebar>", " ").
               gsub("<Tab>", "<tab>").
               gsub("%NAME%", "{{ .Name }}").
               gsub("%IP%", "{{ .HTTPIP }}").
