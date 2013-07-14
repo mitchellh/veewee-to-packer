@@ -153,7 +153,16 @@ module VeeweeToPacker
           warnings << "ISO download instructions: #{input.delete(:iso_download_instructions)}"
         end
 
-        builder["iso_md5"] = input.delete(:iso_md5)
+        if input[:iso_md5]
+          builder["iso_checksum"] = input.delete(:iso_md5)
+          builder["iso_checksum_type"] = "md5"
+        end
+
+        if input[:iso_sha1]
+          builder["iso_checksum"] = input.delete(:iso_sha1)
+          builder["iso_checksum_type"] = "sha1"
+        end
+
         builder["iso_url"] = input.delete(:iso_src)
 
         builder["ssh_username"] = input.delete(:ssh_user) if input[:ssh_user]
