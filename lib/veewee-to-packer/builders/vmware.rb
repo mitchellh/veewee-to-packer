@@ -224,6 +224,7 @@ module VeeweeToPacker
         input.delete(:pae)
         input.delete(:ssh_host_port)
         input.delete(:ssh_key)
+        input.delete(:video_memory_size)
         input.delete(:virtualbox)
 
         if input.length > 0

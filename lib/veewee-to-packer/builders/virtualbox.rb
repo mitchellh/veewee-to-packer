@@ -194,6 +194,11 @@ module VeeweeToPacker
             "modifyvm", "{{.Name}}", "--cpus", input.delete(:cpu_count)]
         end
 
+        if input[:video_memory_size]
+          builder["vboxmanage"] << [
+            "modifyvm", "{{.Name}}", "--vram", input.delete(:video_memory_size)]
+        end
+
         # Taken directly from Veewee, all the flags that VirtualBox definitions
         # can have.
         vm_flags = %w{pagefusion acpi ioapic pae hpet hwvirtex hwvirtexcl nestedpaging largepages vtxvpid synthxcpu rtcuseutc}
