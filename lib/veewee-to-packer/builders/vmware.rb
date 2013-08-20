@@ -146,10 +146,10 @@ module VeeweeToPacker
             kickstart_file_src = Pathname.new(File.expand_path(single_file, input_dir))
             kickstart_file_dest = http_dir.join(kickstart_file_src.basename)
 
-
-            if kickstart_file_src.file?
+            if !kickstart_file_src.file?
               raise Error, "The kickstart file below is specified in the definition but\n" +
-                "is a directory and not a file. The kickstart file list should be files."
+                "is a directory and not a file. The kickstart file list should be files.\n\n" +
+                kickstart_file_src.to_s
             end
 
             FileUtils.cp(kickstart_file_src, kickstart_file_dest)
