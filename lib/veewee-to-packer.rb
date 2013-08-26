@@ -95,6 +95,11 @@ module VeeweeToPacker
       end
     end
 
+    # Sometimes there are empty kickstart files... we just ignore that.
+    if definition[:kickstart_file] == ""
+      definition.delete(:kickstart_file)
+    end
+
     # Some overall things
     if definition[:hooks]
       definition.delete(:hooks)
