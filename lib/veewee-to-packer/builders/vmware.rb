@@ -88,6 +88,7 @@ module VeeweeToPacker
               gsub("<Spacebar>", " ").
               gsub("<Tab>", "<tab>").
               gsub("<Wait>", "<wait>").
+              gsub("<Backspace>", "<bs>").
               gsub("%NAME%", "{{ .Name }}").
               gsub("%IP%", "{{ .HTTPIP }}").
               gsub("%PORT%", "{{ .HTTPPort }}")
