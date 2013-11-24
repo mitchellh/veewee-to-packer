@@ -28,7 +28,7 @@ OptionParser.new do |opts|
   end
 
   opts.on('-v', '--version', 'Show version') do
-    puts "veewee-to-packer: #{VeeweeToPacker::VERSION}"
+    puts "veewee-to-packer #{VeeweeToPacker::VERSION}"
     exit
   end
 end.parse!
