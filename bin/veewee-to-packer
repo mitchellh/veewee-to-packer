@@ -8,6 +8,7 @@ $stdout.sync = true
 $stderr.sync = true
 
 require 'optparse'
+require 'veewee-to-packer'
 
 # Parse arguments
 options = {
@@ -25,6 +26,11 @@ OptionParser.new do |opts|
   opts.on("-o", "--output DIR", String, "Directory where files will be outputted.") do |output|
     options[:output] = output
   end
+
+  opts.on('-v', '--version', 'Show version') do
+    puts "veewee-to-packer: #{VeeweeToPacker::VERSION}"
+    exit
+  end
 end.parse!
 
 if ARGV.length != 1
@@ -33,7 +39,6 @@ if ARGV.length != 1
 end
 
 # Do the actual conversion
-require "veewee-to-packer"
 begin
   warnings = VeeweeToPacker.convert(ARGV[0], options[:output], options[:builders])
 
