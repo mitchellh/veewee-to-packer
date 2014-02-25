@@ -71,12 +71,12 @@ module VeeweeToPacker
       }
 
       def self.name
-        "virtualbox"
+        "virtualbox-iso"
       end
 
       def self.convert(input, input_dir, output_dir)
         warnings =[]
-        builder = { "type" => "virtualbox" }
+        builder = { "type" => "virtualbox-iso" }
 
         if input[:boot_cmd_sequence]
           builder["boot_command"] = input.delete(:boot_cmd_sequence).map do |command|
