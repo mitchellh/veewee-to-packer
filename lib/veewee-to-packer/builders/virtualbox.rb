@@ -172,6 +172,11 @@ module VeeweeToPacker
           builder["iso_checksum_type"] = "sha1"
         end
 
+        if input[:iso_sha256]
+          builder["iso_checksum"] = input.delete(:iso_sha256)
+          builder["iso_checksum_type"] = "sha256"
+        end
+
         builder["iso_url"] = input.delete(:iso_src)
 
         builder["ssh_username"] = input.delete(:ssh_user) if input[:ssh_user]
