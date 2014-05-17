@@ -206,6 +206,16 @@ module VeeweeToPacker
           builder["vmx_data"]["cpuid.coresPerSocket"] = "1"
         end
 
+        if guestos.include? "darwin"
+          builder["vmx_data"]["firmware"] = "efi"
+          builder["vmx_data"]["keyboardAndMouseProfile"] = "macProfile"
+          builder["vmx_data"]["smc.present"] = "TRUE"
+          builder["vmx_data"]["hpet0.present"] = "TRUE"
+          builder["vmx_data"]["ich7m.present"] = "TRUE"
+          builder["vmx_data"]["ehci.present"] = "TRUE"
+          builder["vmx_data"]["usb.present"] = "TRUE"
+        end
+
         # Handle VMware Fusion specific settings
         # Only relevant setting is enable_hypervisor_support while turns on vhv
         if input[:vmfusion]
